@@ -15,3 +15,4 @@ imageio
 scikit-learn
 torch
 torchvision
+streamlit
