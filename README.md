@@ -31,3 +31,20 @@ results.pandas().xyxy[0]  # img1 predictions (pandas)
 # 2  114.75  195.75  1095.0  708.0    0.624512      0  person
 # 3  986.00  304.00  1028.0  420.0    0.286865     27     tie
 ```
+## Использование streamlit
+Для запуска веб интерфейса необходимо ввести следующую команду в консоли:
+```bash
+streamlit run streamlit_demo.py
+```
+В браузере откроется окно с элементом для загрузки изображения:
+<div align="center">
+  <img width="100%" src="https://github.com/SvetlanaShagivaleeva/UrFU_SE/blob/main/data/streamlit_demo_image1.jpg"></a>
+</div>
+После загрузки изображения оно будет отображено под элементом загрузки изображения:
+<div align="center">
+  <img width="100%" src="https://github.com/SvetlanaShagivaleeva/UrFU_SE/blob/main/data/streamlit_demo_image2.jpg"></a>
+</div>
+При загрузки изображения и нажатии кнопки "Задетектить изображение" появится изображения с обнаруженными объектами. Объекты будут выделены красным прямоугольником, над которым будет написан класс объекта и уверенность в нем:
+<div align="center">
+  <img width="100%" src="https://github.com/SvetlanaShagivaleeva/UrFU_SE/blob/main/data/streamlit_demo_image3.jpg"></a>
+</div>
