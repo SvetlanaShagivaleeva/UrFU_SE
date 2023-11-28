@@ -16,3 +16,9 @@ scikit-learn
 torch
 torchvision
 streamlit
+fastapi
+fsspec
+python-multipart
+uvicorn
+pandas
+ultralytics
