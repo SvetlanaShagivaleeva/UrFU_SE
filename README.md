@@ -48,3 +48,22 @@ streamlit run streamlit_demo.py
 <div align="center">
   <img width="100%" src="https://github.com/SvetlanaShagivaleeva/UrFU_SE/blob/main/data/streamlit_demo_image3.jpg"></a>
 </div>
+
+## Использование FastAPI
+Для запуска сервера необходимо ввести следующую команду в консоли:
+```bash
+python server.py
+```
+Заходим в браубере по адресу http://localhost:8000/
+Откроется окно с интерфейсом сайта
+<div align="center">
+  <img width="100%" src="https://github.com/SvetlanaShagivaleeva/UrFU_SE/blob/main/data/fastapi_demo_image1.jpg"></a>
+</div>
+В данном окне можно загрузить изображения для детекций, нажав кнопку "выбрать файл". А также одну из моделей yolov5
+<div align="center">
+  <img width="100%" src="https://github.com/SvetlanaShagivaleeva/UrFU_SE/blob/main/data/fastapi_demo_image2.jpg"></a>
+</div>
+Нажав кнопку "Submit" получим изображение с задетектированными объектами
+<div align="center">
+  <img width="100%" src="https://github.com/SvetlanaShagivaleeva/UrFU_SE/blob/main/data/fastapi_demo_image3.jpg"></a>
+</div>
