@@ -22,3 +22,4 @@ python-multipart
 uvicorn
 pandas
 ultralytics
+setuptools>=65.5.1
