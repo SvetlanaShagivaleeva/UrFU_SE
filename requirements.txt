@@ -25,3 +25,4 @@ ultralytics
 setuptools>=65.5.1
 httpx
 python-multipart
+pytest
