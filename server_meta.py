@@ -52,9 +52,9 @@ async def processing_request(file: UploadFile = File(...), model_name: str = For
             },
             status_code=200,
         )
-    except Exception as error:
+    except Exception:
         return JSONResponse(
-            {"message": "object detection failed", "errors": error}, status_code=400
+            {"message": "object detection failed", "errors": "error"}, status_code=400
         )
 
 
