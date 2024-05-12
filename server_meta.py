@@ -13,7 +13,7 @@ app = FastAPI()
 
 @app.get("/")
 async def home_page():
-    html_content = '''
+    html_content = """
           <form method="post" enctype="multipart/form-data">
           <div>
               <label>Upload Image</label>
@@ -30,48 +30,55 @@ async def home_page():
           </div>
           <button type="submit">Submit</button>
           </form>
-    '''
+    """
 
     return HTMLResponse(content=html_content, status_code=200)
 
 
 @app.post("/")
-async def processing_request(
-    file: UploadFile = File(...), 
-    model_name: str = Form(...)
-):
+async def processing_request(file: UploadFile = File(...), model_name: str = Form(...)):
     try:
-        model = torch.hub.load('ultralytics/yolov5', model_name, pretrained=True, force_reload = False)
+        model = torch.hub.load(
+            "ultralytics/yolov5", model_name, pretrained=True, force_reload=False
+        )
 
         img = Image.open(BytesIO(await file.read()))
         results = model(img)
 
-        json_results = results_to_json(results,model)
-        return JSONResponse({"data": json_results,
-                                "message": "object detected successfully",
-                                "errors": None},
-                            status_code=200)
+        json_results = results_to_json(results, model)
+        return JSONResponse(
+            {
+                "data": json_results,
+                "message": "object detected successfully",
+                "errors": None,
+            },
+            status_code=200,
+        )
     except Exception as error:
-            return JSONResponse({"message": "object detection failed",
-                                 "errors": "error"},
-                                status_code=400)
+        return JSONResponse(
+            {"message": "object detection failed", "errors": "error"}, status_code=400
+        )
 
 
 def results_to_json(results, model):
     data = []
     for result in results.xyxy:
         for pred in result:
-            data.append({
-            "class": int(pred[5]),
-            "class_name": model.model.names[int(pred[5])],
-            "bbox": [int(x) for x in pred[:4].tolist()], #convert bbox results to int from float
-            "confidence": float(pred[4]),
-            })
+            data.append(
+                {
+                    "class": int(pred[5]),
+                    "class_name": model.model.names[int(pred[5])],
+                    "bbox": [
+                        int(x) for x in pred[:4].tolist()
+                    ],  # convert bbox results to int from float
+                    "confidence": float(pred[4]),
+                }
+            )
     return data
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import uvicorn
-    
-    app_str = 'server:app'
-    uvicorn.run(app_str, host='localhost', port=8000, reload=True, workers=1)
+
+    app_str = "server:app"
+    uvicorn.run(app_str, host="localhost", port=8000, reload=True, workers=1)
