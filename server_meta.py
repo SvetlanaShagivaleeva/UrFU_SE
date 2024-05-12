@@ -2,8 +2,6 @@ from io import BytesIO
 
 from PIL import Image
 import torch
-import cv2
-import numpy as np
 from fastapi import FastAPI, Form, File, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse
 
@@ -56,7 +54,7 @@ async def processing_request(file: UploadFile = File(...), model_name: str = For
         )
     except Exception as error:
         return JSONResponse(
-            {"message": "object detection failed", "errors": "error"}, status_code=400
+            {"message": "object detection failed", "errors": error}, status_code=400
         )
 
 
