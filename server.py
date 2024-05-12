@@ -15,7 +15,7 @@ app = FastAPI()
 
 @app.get("/")
 async def home_page():
-    html_content = '''
+    html_content = """
           <form method="post" enctype="multipart/form-data">
           <div>
               <label>Upload Image</label>
@@ -32,17 +32,16 @@ async def home_page():
           </div>
           <button type="submit">Submit</button>
           </form>
-    '''
+    """
 
     return HTMLResponse(content=html_content, status_code=200)
 
 
 @app.post("/")
-async def processing_request(
-    file: UploadFile = File(...), 
-    model_name: str = Form(...)
-):
-    model = torch.hub.load('ultralytics/yolov5', model_name, pretrained=True, force_reload = False)
+async def processing_request(file: UploadFile = File(...), model_name: str = Form(...)):
+    model = torch.hub.load(
+        "ultralytics/yolov5", model_name, pretrained=True, force_reload=False
+    )
 
     img = Image.open(BytesIO(await file.read()))
     results = model(img)
@@ -58,34 +57,54 @@ async def processing_request(
 
 
 def show_prediction(img, preds):
-  img = np.array(img)
-  for data in preds.xyxy[0]:
-      x0, y0, xk, yk, score, id_class = data
-      x0, y0, xk, yk, id_class = int(x0), int(y0), int(xk), int(yk), int(id_class)
-      img = cv2.rectangle(img, (x0, y0), (xk, yk), (255, 0, 0), 2) 
-      img = cv2.putText(img, f'{int_to_classes[id_class + 1]}', (x0 + 90, y0 - 5), cv2.FONT_HERSHEY_SIMPLEX,  
-                        1, (255, 0, 0), 2, cv2.LINE_AA)
-      img = cv2.putText(img, f'{score:.2}:', (x0, y0 - 5), cv2.FONT_HERSHEY_SIMPLEX,  
-                        1, (255, 0, 0), 2, cv2.LINE_AA)
-  
-  return img
+    img = np.array(img)
+    for data in preds.xyxy[0]:
+        x0, y0, xk, yk, score, id_class = data
+        x0, y0, xk, yk, id_class = int(x0), int(y0), int(xk), int(yk), int(id_class)
+        img = cv2.rectangle(img, (x0, y0), (xk, yk), (255, 0, 0), 2)
+        img = cv2.putText(
+            img,
+            f"{int_to_classes[id_class + 1]}",
+            (x0 + 90, y0 - 5),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 0, 0),
+            2,
+            cv2.LINE_AA,
+        )
+        img = cv2.putText(
+            img,
+            f"{score:.2}:",
+            (x0, y0 - 5),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 0, 0),
+            2,
+            cv2.LINE_AA,
+        )
+
+    return img
 
 
 def results_to_json(results, model):
     data = []
     for result in results.xyxy:
         for pred in result:
-            data.append({
-            "class": int(pred[5]),
-            "class_name": model.model.names[int(pred[5])],
-            "bbox": [int(x) for x in pred[:4].tolist()], #convert bbox results to int from float
-            "confidence": float(pred[4]),
-            })
+            data.append(
+                {
+                    "class": int(pred[5]),
+                    "class_name": model.model.names[int(pred[5])],
+                    "bbox": [
+                        int(x) for x in pred[:4].tolist()
+                    ],  # convert bbox results to int from float
+                    "confidence": float(pred[4]),
+                }
+            )
     return data
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import uvicorn
-    
-    app_str = 'server:app'
-    uvicorn.run(app_str, host='localhost', port=8000, reload=True, workers=1)
+
+    app_str = "server:app"
+    uvicorn.run(app_str, host="localhost", port=8000, reload=True, workers=1)
